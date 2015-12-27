@@ -5,3 +5,5 @@ src/*.data*
 *.JIPO
 *.jungle*
 *.JiProj
+.DS_Store
+*~

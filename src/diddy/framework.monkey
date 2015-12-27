@@ -1,15 +1,30 @@
 #Rem
-Copyright (c) 2011 Steve Revill and Shane Woolcock
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+Copyright (c) 2011 Steve Revill And Shane Woolcock
+Permission is hereby granted, free of charge, To any person obtaining a copy of this software And associated documentation files (the "Software"), To deal in the Software without restriction, including without limitation the rights To use, copy, modify, merge, publish, distribute, sublicense, And/Or sell copies of the Software, And To permit persons To whom the Software is furnished To do so, subject To the following conditions:
+The above copyright notice And this permission notice shall be included in all copies Or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #End
 
-#rem
+#Rem
 Header: The Screen-Based Diddy Game Framework
-This framework allows developers to quickly build screens and move between them quickly.
-Also included are image and sound resource managers, a delta timer, sprite and particle classes.
+This framework allows developers To quickly build screens.
+And move between them quickly.
+Also included are:
+* the game itself (diddyGame Global)
+* an image manager (diddyGame.images)
+* a sound manager (diggyGame.sounds)
+* a screens repository (diddyGame.screens)
+* a click sound
+* management of input - mouse, touch, keyboard - (diddyGame.inputCache)
+* a delta timer (dt Global), 
+* sprite class
+* particle class
+* support for easy definition and loading of screen assets (diddyGame.diddyData)
+
+
+
 Example of how to set up the DiddyApp:
+
 [code]
 Strict
 
@@ -22,7 +37,7 @@ End
 
 Global titleScreen:TitleScreen
 
-Class MyGame extends DiddyApp
+Class MyGame Extends DiddyApp
 	Method Create:Void()
 		titleScreen = New TitleScreen
 		Start(titleScreen)
@@ -103,7 +118,7 @@ Class DiddyApp Extends App
 	
 	Field virtualResOn:Bool = True
 	Field aspectRatioOn:Bool = False
-	Field autoCls:Bool = False
+	Field autoCls:Bool = False				' Clear the screen in Render
 
 	Field aspectRatio:Float
 	Field multi:Float
@@ -176,6 +191,7 @@ Public
 		' DiddyApp now assigns itself to game, so you just need to do: New MyGame()
 		' Assigning it manually will have no effect, but won't break anything.
 		diddyGame = Self
+		
 		Self.screens = New Screens
 		Self.exitScreen = New ExitScreen
 		Self.loadingScreen = New LoadingScreen
@@ -357,6 +373,10 @@ Public
 		End
 		mouseHit = MouseHit()
 		inputCache.ReadInput()
+		
+		'Rescale TouchX(i) and TouchY(i)
+		'The issue is that what is to be rescaled and how many items to do?
+		
 		inputCache.HandleEvents(currentScreen)
 		
 		If debugKeyOn
@@ -440,13 +460,17 @@ Public
 		y += gap
 		DrawText "Screen Height      = "+SCREEN_HEIGHT, 0, y
 		y += gap
-		DrawText "VMouseX            = "+Self.mouseX, 0, y
+		DrawText "VMOUSEX            = "+Self.mouseX, 0, y
 		y += gap
-		DrawText "VMouseY            = "+Self.mouseY, 0, y
+		DrawText "VMOUSEY            = "+Self.mouseY, 0, y
 		y += gap
-		DrawText "MouseX             = "+MouseX(), 0, y
+		DrawText "MOUSEX             = "+MouseX(), 0, y
 		y += gap
-		DrawText "MouseY             = "+MouseY(), 0, y
+		DrawText "MOUSEY             = "+MouseY(), 0, y
+		y += gap
+		DrawText "TOUCHX(0)          = "+TouchX(0), 0, y
+		y += gap
+		DrawText "TOUCHY(0)          = "+TouchY(0), 0, y
 		y += gap
 		DrawText "Music File         = "+musicFile, 0, y
 		y += gap
@@ -589,8 +613,9 @@ Public
 End
 
 
-'summary: Map to store the Screens
+'summary: Map to store the Screens keyed by uppercased name
 Class Screens Extends StringMap<Screen>
+
 	Method Set:Bool(key:String, value:Screen)
 		Return Super.Set(key.ToUpper(), value)
 	End
@@ -605,14 +630,15 @@ Class Screens Extends StringMap<Screen>
 			Next
 		End
 
-		Local i:Screen = Self.Get(name)
-		AssertNotNull(i, "Screen '" + name + "' not found in the Screens map")
-		Return i
+		Local screen:Screen = Self.Get(name)
+		AssertNotNull(screen, "Screen '" + name + "' not found in the Screens map")
+		Return screen
 	End
 End
 
 'summary: Simple screen fading
 Class ScreenFade
+
 	Field fadeTime:Float
 	Field fadeOut:Bool
 	Field ratio:Float = 0
@@ -622,7 +648,12 @@ Class ScreenFade
 	Field fadeSound:Bool
 	Field allowScreenUpdate:Bool = True
 	
-	Method Start:Void(fadeTime:Float, fadeOut:Bool, fadeSound:Bool = False, fadeMusic:Bool = False, allowScreenUpdate:Bool = True)
+	Method Start:Void(fadeTime:Float, 
+					 fadeOut:Bool, 
+					 fadeSound:Bool = False, 
+					 fadeMusic:Bool = False, 
+					 allowScreenUpdate:Bool = True)
+		
 		If active Then Return
 		diddyGame.ResetDelta()
 		active = True
@@ -741,7 +772,9 @@ Class LoadingScreenDelegate Abstract
 End
 
 'summary: Screen to draw a loading screen
+'can be provided with an optional loadingScreenDelegate
 Class LoadingScreen Extends Screen
+
 	Field finished:Bool
 	Field destination:Screen
 	Field loadingBar:LoadingBar
@@ -754,7 +787,13 @@ Class LoadingScreen Extends Screen
 		loadingBar = New LoadingBar
 	End
 	
-	Method Init:Void(loadingScreenPath:String, loadingFullBarPath:String, loadingEmptyBarPath:String, steps:Int, loadingBarX:Int = -1, loadingBarY:Int = -1)
+	Method Init:Void(loadingScreenPath:String, 
+					loadingFullBarPath:String, 
+					loadingEmptyBarPath:String, 
+					steps:Int, 
+					loadingBarX:Int = -1, 
+					loadingBarY:Int = -1)
+					
 		image = LoadBitmap(loadingScreenPath, Image.MidHandle)
 		If loadingBarX = -1 Then loadingBarX = SCREEN_WIDTH2
 		If loadingBarY = -1 Then loadingBarY = SCREEN_HEIGHT2
@@ -773,7 +812,7 @@ Class LoadingScreen Extends Screen
 	
 	Method Render:Void()
 		Cls()
-		If not diddyGame.screenFade.active Then rendering = True
+		If Not diddyGame.screenFade.active Then rendering = True
 		DrawImage image, SCREEN_WIDTH2, SCREEN_HEIGHT2
 		loadingBar.Draw()
 		If loadingScreenDelegate Then loadingScreenDelegate.Draw()
@@ -816,7 +855,13 @@ Class ExitScreen Extends Screen
 End
 
 'summary: Abstract Screen class
+'provides nagivation between screens (based on names for the screens)
+'there is a backScreenName (where to go back)
+'there is a destinationScreen (where to go next)
+'if diddy data's sound/music matches the screen name (case insensitive) 
+'it will launch provided PreStart is called.
 Class Screen Abstract
+
 Private
 	Field autoFadeIn:Bool = False
 	Field autoFadeInTime:Float = 50
@@ -840,7 +885,7 @@ Public
 		diddyGame.currentScreen = Self
 		Load()
 		' load screens graphics
-		For Local key:String = EachIn diddyGame.images.Keys()
+		For Local key:String = Eachin diddyGame.images.Keys()
 			Local i:GameImage = diddyGame.images.Get(key)
 			If i.preLoad And i.screenName.ToUpper() = name.ToUpper()
 				If i.frames > 1
@@ -852,7 +897,7 @@ Public
 		Next
 		
 		' load screens sounds
-		For Local key:String = EachIn diddyGame.sounds.Keys()
+		For Local key:String = Eachin diddyGame.sounds.Keys()
 			Local i:GameSound = diddyGame.sounds.Get(key)
 			If i.preLoad And i.screenName.ToUpper() = name.ToUpper()
 				i.Load(i.path, False, i.screenName)
@@ -872,7 +917,7 @@ Public
 	
 	Method RenderBackgroundLayers:Void()
 		If layers Then
-			For Local layer:DiddyDataLayer = EachIn layers
+			For Local layer:DiddyDataLayer = Eachin layers
 				If layer.index >= 0 Then Return
 				layer.Render()
 			Next
@@ -898,7 +943,7 @@ Public
 	Method Back:Void(fadeTime:Float = defaultFadeTime, fadeSound:Bool = False, fadeMusic:Bool = False, allowScreenUpdate:Bool = True)
 		If backScreenName="exit" Then
 			FadeToScreen(Null)
-		ElseIf backScreenName Then
+		Elseif backScreenName Then
 			Local scr:Screen = diddyGame.screens.Find(backScreenName)
 			If scr Then FadeToScreen(scr, fadeTime, fadeSound, fadeMusic, allowScreenUpdate)
 		End
@@ -991,7 +1036,12 @@ Public
 	End
 	
 	'summary: convenience method
-	Method FadeToScreen:Void(screen:Screen, fadeTime:Float = defaultFadeTime, fadeSound:Bool = False, fadeMusic:Bool = False, allowScreenUpdate:Bool = True)
+	Method FadeToScreen:Void(screen:Screen, 
+							fadeTime:Float = defaultFadeTime, 
+							fadeSound:Bool = False, 
+							fadeMusic:Bool = False, 
+							allowScreenUpdate:Bool = True)
+							
 		' don't try to fade twice
 		If diddyGame.screenFade.active Then Return
 		
@@ -1339,14 +1389,14 @@ Class ImageBank Extends StringMap<GameImage> Implements ITilesetSource
 		If diddyGame.debugOn
 			For Local key:String = Eachin Self.Keys()
 				Local i:GameImage = Self.Get(key)
-				if Not i.preLoad Then
+				If Not i.preLoad Then
 					Print key + " is stored in the image map."
 				End
 			Next
 		End
 		Local i:GameImage = Self.Get(name)
 		AssertNotNull(i, "Image '" + name + "' not found in the ImageBank")
-		If i.preLoad and i.image = null Then AssertError("Image '" + name + "' not found in the ImageBank")
+		If i.preLoad And i.image = Null Then AssertError("Image '" + name + "' not found in the ImageBank")
 		Return i
 	End
 	
@@ -1413,7 +1463,7 @@ Class SpriteAnimation
 	Field pingPong:Bool = False
 	Field loop:Bool = True
 	Field ping:Int
-	Field randomStartFrame:bool = False
+	Field randomStartFrame:Bool = False
 	
 	Method New(speed:Int = 125, pingPong:Bool = False, loop:Bool = True, randomStartFrame:Bool = False)
 		frames = New GameImage[1]
@@ -1595,7 +1645,7 @@ Public
 		Self.w = w
 		Self.h = h
 		Self.frames = total
-		If not preLoad Then
+		If Not preLoad Then
 			image = LoadAnimBitmap(file, w, h, total, tmpImage)
 			CalcSize()
 			MidHandle(midhandle)
@@ -1833,7 +1883,7 @@ Class SoundBank Extends StringMap<GameSound>
 		
 		Local i:GameSound = Self.Get(name)
 		Local err:String = "Sound '" + name + "' not found in the SoundBank"
-		If i.preLoad and i.sound = null Then AssertError(err)
+		If i.preLoad And i.sound = Null Then AssertError(err)
 		AssertNotNull(i, err)
 		Return i
 	End
@@ -1851,7 +1901,7 @@ Class GameSound
 	Field loopChannelList:DiddyIntStack = New DiddyIntStack
 	Field soundAvailableMillis:Int
 	Field soundDelay:Int
-	Field stopChannelBeforePlaying:Bool = true
+	Field stopChannelBeforePlaying:Bool = True
 	Field screenName:String
 	Field preLoad:Bool
 	Field path:String
@@ -1864,13 +1914,13 @@ Class GameSound
 			If file.Contains(".wav") Or file.Contains(".ogg") Or file.Contains(".mp3") Or file.Contains(".m4a") Or file.Contains(".wma") Then
 				sound = LoadSoundSample(SoundBank.path + file)
 			Else
-				#if TARGET="flash"
+				#If TARGET="flash"
 					sound = LoadSoundSample(SoundBank.path + file +".mp3")
-				#else If TARGET="android"
+				#Else If TARGET="android"
 					sound = LoadSoundSample(SoundBank.path + file +".ogg")
-				#else
+				#Else
 					sound = LoadSoundSample(SoundBank.path + file +".wav")
-				#endif
+				#Endif
 			End
 		End
 		name = StripAll(file.ToUpper())
@@ -1878,7 +1928,7 @@ Class GameSound
 	
 	Method Play:Bool(playChannel:Int = -1, force:Bool=False)
 		If force Or soundDelay = 0 Or soundAvailableMillis < dt.currentticks
-			if stopChannelBeforePlaying And Self.IsPlaying()
+			If stopChannelBeforePlaying And Self.IsPlaying()
 				Self.Stop()
 			End
 			channel = SoundPlayer.PlayFx(sound, pan, rate, volume * (diddyGame.soundVolume / 100.0), loop, playChannel)
@@ -1904,9 +1954,9 @@ Class GameSound
 	End
 
 	Method IsPlaying:Int()
-		#if TARGET="flash"
+		#If TARGET="flash"
 			Return 0
-		#end
+		#End
 		Return(ChannelState(channel))
 	End
 	
@@ -1969,6 +2019,7 @@ Class SoundPlayer
 End
 
 'summary: Sprite Class
+'some superpowers: glow, ping pong, scale -1, collision (including mouse collision, but not touch)
 Class Sprite
 	Field name:String
 	Field visible:Bool = True
@@ -2320,21 +2371,21 @@ Class HitBox
 	
 		Local x:Int = Self.x
 		Local y:Int = Self.y
-		If X < x or Y < y
+		If X < x Or Y < y
 	    	Return False
 		End
 		
 		w += x
 		W += X
 		If (W <= X)
-		    If (w >= x or W > w) Return False
+			If (w >= x Or W > w) Return False
 		Else
 		    If (w >= x And W > w) Return False
 		End
 		h += y
 		H += Y
 		If (H <= Y)
-	    	If (h >= y or H > h) Return False
+			If (h >= y Or H > h) Return False
 		Else
 	    	If (h >= y And H > h) Return False
 		End
@@ -2352,12 +2403,12 @@ Class HitBox
 
 		Local x:Int = Self.x;
 		Local y:Int = Self.y;
-		If (X < x or Y < y)
+		If (X < x Or Y < y)
 		    Return False
 		End
 		w += x
 		h += y
-		Return ( (w < x or w > X) and (h < y or h > Y))
+		Return ( (w < x Or w > X) And (h < y Or h > Y))
 	End
 	
 	Method Intersects:Bool(r:HitBox)
@@ -2365,7 +2416,7 @@ Class HitBox
 		Local th:Int = Self.h
 		Local rw:Int = r.w
 		Local rh:Int = r.h
-		If rw <= 0 or rh <= 0 or tw <= 0 or th <= 0 Then
+		If rw <= 0 Or rh <= 0 Or tw <= 0 Or th <= 0 Then
 			Return False
 		End
 		Local tx:Int = Self.x
@@ -2377,7 +2428,7 @@ Class HitBox
 		tw += tx
 		th += ty
 		
-		Return ( (rw < rx or rw > tx) And (rh < ry or rh > ty) And (tw < tx or tw > rx) And (th < ty or th > ry))
+		Return ( (rw < rx Or rw > tx) And (rh < ry Or rh > ty) And (tw < tx Or tw > rx) And (th < ty Or th > ry))
 	End
 	
 End
@@ -2517,6 +2568,7 @@ Class Particle Extends Sprite
 End
 
 'summary: Simple Mouse functions class
+'piggybacks on the diddyGame global for mouseX and mouseY that are updated in inputcache.monkey
 Class DiddyMouse
 	Field lastX:Int
 	Field lastY:Int
@@ -2550,6 +2602,7 @@ End
 
 #Rem
 Summary: Simple SplashScreen
+Provides for a quick way to have splash screens (named "Splash")
 #End
 Class SplashScreen Extends Screen
 	Field img:Image
@@ -2596,7 +2649,7 @@ Class SplashScreen Extends Screen
 		If time < timeOut
 			time += 1 * dt.delta
 		Else
-			If not fade
+			If Not fade
 				FadeToScreen(nextScreen)
 			End
 		End

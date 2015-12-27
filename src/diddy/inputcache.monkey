@@ -321,9 +321,9 @@ Public
 					touchReleased[i] = False
 				End
 				touchDown[i] = newval
-				' get the location of each touch
-				touchX[i] = TouchX(i)
-				touchY[i] = TouchY(i)
+				' get the location of each touch - scaled properly
+				touchX[i] = TouchX(i) / SCREENX_RATIO
+				touchY[i] = TouchY(i) / SCREENY_RATIO
 				' update the "current" arrays and the min/max indices
 				If touchDown[i] Then
 					currentTouchDown[touchDownCount] = i

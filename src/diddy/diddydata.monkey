@@ -11,8 +11,11 @@ Import diddy.framework
 Import diddy.functions
 Import diddy.containers
 
+' Facility to declare and load global and/or screen level assets (sound, images)
+' Resources are defined in an XML file
+' Resources are accessed from the diddyGame.[images|sounds].Find('name') 
 Class DiddyData
-	Method New(filename:String="diddydata.xml")
+	Method New(filename:String = "diddydata.xml")
 		Local str:String = LoadString(filename)
 		If Not str Then
 			Throw New DiddyException("Cannot load diddydata file: "+filename)
@@ -24,10 +27,10 @@ Class DiddyData
 		Local rootElement:XMLElement = doc.Root
 		
 		Local sw:String = rootElement.GetAttribute("screenWidth").Trim()
-		If not sw Then sw = 640
+		If Not sw Then sw = 640
 
 		Local sh:String = rootElement.GetAttribute("screenHeight").Trim()
-		If not sh Then sh = 480
+		If Not sh Then sh = 480
 
 		Local useAspect:String = rootElement.GetAttribute("useAspectRatio").Trim()
 		Local useAspectBool:Bool = useAspect And useAspect.ToLower() = "true"
@@ -94,7 +97,7 @@ Class DiddyData
 	
 	Method LoadXMLImages:Void(xmlElement:XMLElement, preLoad:Bool = False, screenName:String = "")
 		Local imagesElement:XMLElement = xmlElement.GetFirstChildByName("images")
-		If imagesElement <> null Then
+		If imagesElement <> Null Then
 			For Local node:XMLElement = Eachin imagesElement.GetChildrenByName("image")
 				Local name:String = node.GetAttribute("name").Trim()
 				Local path:String = node.GetAttribute("path").Trim()
@@ -151,7 +154,7 @@ Class DiddyData
 	
 	Method LoadXMLSounds:Void(xmlElement:XMLElement, preLoad:Bool = False, screenName:String = "")
 		Local soundsElement:XMLElement = xmlElement.GetFirstChildByName("sounds")
-		If soundsElement <> null Then
+		If soundsElement <> Null Then
 			For Local node:XMLElement = EachIn soundsElement.GetChildrenByName("sound")
 				Local name:String = node.GetAttribute("name").Trim()
 				Local path:String = node.GetAttribute("path").Trim()
