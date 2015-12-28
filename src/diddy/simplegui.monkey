@@ -411,8 +411,10 @@ This should be called only once, towards the start of your [[Screen.Update]] imp
 Summary: Delegates to [[Sprite.Precache]] on each of the buttons.
 #End
 	Method Precache:Void()
-		For Local b:SimpleButton = EachIn Self
-			b.Precache()
+		For Local b:SimpleMenuObject = EachIn Self
+			If Sprite(b)
+				Sprite(b).Precache()
+			End
 		Next
 	End
 	
@@ -1186,8 +1188,10 @@ Summary: Moves the dialog by the set amounts along with text and menus
 		
 		If moveButtons
 			If menu
-				For Local b:SimpleButton = EachIn Self.menu
-					b.MoveBy(x, y)
+				For Local b:SimpleMenuObject = EachIn Self.menu
+					If SimpleButton(b)
+						SimpleButton(b).MoveBy(x, y)
+					End
 				Next
 			End
 		End

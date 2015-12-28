@@ -113,6 +113,7 @@ Class DiddyApp Extends App
 
 	Field debugKeyOn:Bool = False
 	Field debugOn:Bool = False
+	Field drawDebugOn:Bool = False
 	Field drawFPSOn:Bool = False
 	Field debugKey:Int = KEY_F1
 	
@@ -131,7 +132,7 @@ Class DiddyApp Extends App
 	Field virtualXOff:Float
 	Field virtualYOff:Float
 	
-	Field FPS:Int = 60
+	Field FPS:Int = 30
 	
 	' current Screen
 	Field currentScreen:Screen
@@ -344,7 +345,7 @@ Public
 				currentScreen.DebugRender()
 			End
 			
-			If debugOn
+			If drawDebugOn
 				DrawDebug()
 			End
 
@@ -1106,7 +1107,7 @@ Class DeltaTimer
 		delta = frametime / (1000.0 / targetfps)
 		If delta > 5 Then
 			If diddyGame.debugOn
-				Print "WARNING DELTA GREATER THAN 5!!! Reseting it to 1"
+				Print "WARNING DELTA GREATER THAN 5!!! Resetting it to 1"
 			End
 			delta = 1
 		End
