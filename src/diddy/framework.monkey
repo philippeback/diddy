@@ -782,6 +782,7 @@ Class LoadingScreen Extends Screen
 	Field image:Image
 	Field loadingScreenDelegate:LoadingScreenDelegate
 	Field rendering:Bool
+	Field allowNullDest:Bool = False
 	
 	Method New()
 		name = "loading"
@@ -808,7 +809,11 @@ Class LoadingScreen Extends Screen
 	
 	Method Start:Void()
 		finished = False
-		If destination = Null Then Error "Loading Screen Destination is null!"
+		If destination = Null
+			If Not Self.allowNullDest
+				Error "Loading Screen Destination is null!"
+			EndIf
+		EndIf
 	End
 	
 	Method Render:Void()
