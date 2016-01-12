@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Files>
+    <DocUserOptions Filename=".\diddyjungle.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+      <CursorPos>
+        <X>0</X>
+        <Y>0</Y>
+      </CursorPos>
+      <OutLiningSerialization />
+      <OutLiningSplitSerialization />
+      <DocGUID />
+    </DocUserOptions>
+  </Files>
+  <Folders>
+    <FolderStatus NodePath="diddy\diddy" Expanded="true" />
+    <FolderStatus NodePath="diddy\diddy\gui" Expanded="false" />
+    <FolderStatus NodePath="diddy\diddy\native" Expanded="false" />
+    <FolderStatus NodePath="diddy\diddy\native\googlegameservice" Expanded="false" />
+    <FolderStatus NodePath="diddy\diddy\native\res" Expanded="false" />
+    <FolderStatus NodePath="diddy\diddy\native\res\values" Expanded="false" />
+    <FolderStatus NodePath="diddy\diddy\tile" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Collections" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Collections\Generic" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\AtomicTypes" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\Collections" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\Collections\Generic" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\Execution" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\Execution\ExecutionPolicy" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\ForkJoin" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\Future" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\Helpers" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Threading\Locks" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\Spring.Threading\Utility" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\TinyThread++-1.0" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\TinyThread++-1.0\doc" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\TinyThread++-1.0\doc\html" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\TinyThread++-1.0\source" Expanded="false" />
+    <FolderStatus NodePath="diddy\threading\native\TinyThread++-1.0\test" Expanded="false" />
+  </Folders>
+</JiProjUserOptions>
