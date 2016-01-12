@@ -2,8 +2,5 @@
 src/*.data*
 *conflicted copy*
 *.orig
-*.JIPO
-*.jungle*
-*.JiProj
 .DS_Store
 *~
