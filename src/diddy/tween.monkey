@@ -1680,6 +1680,11 @@ Class TweenDep
 		Return -1
 	End
   
+	'summary: creates a sinusoidal tween
+	' tweenLength in microseconds,
+	' waveOffset in units you need to offset the resulting value by 
+	' wavePhase between 0 and 1.0 is the initial phase one starts in,
+	' waveAmplitude as a scaling factor (1.0 is no scaling)
 	Function CreateSine:TweenDep(tweenLength:Int, waveOffset#=0, wavePhase#=0, waveAmplitude#=1, waveLength#=1)
 		' find a free tween slot and die if we couldn't
 		Local idx:Int = FindEmpty()

@@ -782,14 +782,15 @@ Class LoadingScreen Extends Screen
 	Field image:Image
 	Field loadingScreenDelegate:LoadingScreenDelegate
 	Field rendering:Bool
+	Field allowNullDest:Bool = False
 	
 	Method New()
 		name = "loading"
 		loadingBar = New LoadingBar
 	End
 	
-	Method Init:Void(loadingScreenPath:String, 
-					loadingFullBarPath:String, 
+	Method Init:Void(loadingScreenPath:String,
+					loadingFullBarPath:String,
 					loadingEmptyBarPath:String, 
 					steps:Int, 
 					loadingBarX:Int = -1, 
@@ -808,7 +809,9 @@ Class LoadingScreen Extends Screen
 	
 	Method Start:Void()
 		finished = False
-		If destination = Null Then Error "Loading Screen Destination is null!"
+		If Not allowNullDest
+			If destination = Null Then Error "Loading Screen Destination is null!"
+		EndIf
 	End
 	
 	Method Render:Void()
